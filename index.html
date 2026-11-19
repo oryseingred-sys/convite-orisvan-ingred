@@ -531,13 +531,10 @@ body{position:fixed;inset:0;background:var(--paper);font-family:'Montserrat',Ari
         </div>
 
         <svg class="branch-divider large" viewBox="0 0 320 44" fill="none" aria-hidden="true">
-          <!-- Haste central com laços e encontro central fiel ao ramo.svg -->
           <path d="M26 30 C 44 37, 68 35, 81 24 C 85 20, 84 13, 79 14 C 74 15, 76 23, 84 24 C 98 25, 114 14, 134 15 C 148 16, 156 23, 160 31 C 164 23, 172 16, 186 15 C 206 14, 222 25, 236 24 C 244 23, 246 15, 241 14 C 236 13, 235 20, 239 24 C 252 35, 276 37, 294 30" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- 3 folhas lado esquerdo -->
           <path d="M26 30 C 14 23, 6 13, 4 3 C 15 6, 23 16, 26 30 Z" fill="currentColor"/>
           <path d="M35 32 C 28 21, 28 11, 32 3 C 39 10, 41 21, 35 32 Z" fill="currentColor"/>
           <path d="M26 32 C 16 32, 9 35, 6 40 C 14 41, 22 38, 26 32 Z" fill="currentColor"/>
-          <!-- 3 folhas lado direito -->
           <path d="M294 30 C 306 23, 314 13, 316 3 C 305 6, 297 16, 294 30 Z" fill="currentColor"/>
           <path d="M285 32 C 292 21, 292 11, 288 3 C 281 10, 279 21, 285 32 Z" fill="currentColor"/>
           <path d="M294 32 C 304 32, 311 35, 314 40 C 306 41, 298 38, 294 32 Z" fill="currentColor"/>
@@ -756,6 +753,9 @@ body{position:fixed;inset:0;background:var(--paper);font-family:'Montserrat',Ari
   </section>
 </main>
 
+<!-- Áudio invisível em loop contínuo -->
+<audio id="bgMusic" src="musica.mp3" loop preload="auto" playsinline style="display:none" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='assets/musica.mp3';this.load();}"></audio>
+
 <div class="toast" id="toast">Chave Pix copiada!</div>
 
 <script>
@@ -962,6 +962,17 @@ body{position:fixed;inset:0;background:var(--paper);font-family:'Montserrat',Ari
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2300);
   });
+
+  // Música de fundo invisível em loop contínuo (inicia no primeiro toque/clique)
+  const bgMusic = document.getElementById('bgMusic');
+  function startMusic() {
+    if (!bgMusic || !bgMusic.paused) return;
+    bgMusic.play().catch(() => {});
+  }
+  ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(ev => {
+    window.addEventListener(ev, startMusic, { passive: true });
+  });
+  startMusic();
 
   renderIdle();
 })();
